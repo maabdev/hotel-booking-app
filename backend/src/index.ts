@@ -15,7 +15,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string) // it could be undefined
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING  as string) // it could be undefined
 
 const app = express();
 app.use(cookieParser());
@@ -29,15 +29,17 @@ app.use(cors({
 }
 
 ));
+
+app.use(express.static(path.join(__dirname, "../../frontend/dist"))) // to serve static assets on this dir on the backend url
  
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/my-hotels", myHotelsRoutes);
 
 app.get("*", (req:Request, res: Response)=>{
-    res.sendFile(path.join(__dirname, "../../frontend/index.html"));
+    res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 }) 
-
+ 
 const PORT = process.env.PORT || 4000
 
 app.listen(PORT, ()=>{  // start the server
